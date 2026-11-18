@@ -1,8 +1,204 @@
+:root {
+  --ink: #1B2A3A;
+  --paper: #EEF2F6;
+  --signal: #2F5BEA;
+  --signal-dark: #2448C4;
+  --packet: #F2A900;
+  --wire: #9AA9BA;
+  --muted: #4E6073;
+}
+
+* {
+  box-sizing: border-box;
+}
+
 body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--paper);
+  color: var(--ink);
+  font: 17px/1.55 "Barlow", "Helvetica Neue", Arial, sans-serif;
 }
 
 a {
-  color: #00B7FF;
+  color: var(--signal);
+}
+
+.hero {
+  flex: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+  align-items: center;
+  gap: 48px;
+  width: 100%;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 64px 40px;
+}
+
+.hero-title,
+.page-title {
+  margin: 0;
+  font-family: "Barlow Condensed", "Arial Narrow", Arial, sans-serif;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.hero-title {
+  font-size: clamp(3.5rem, 8vw, 6.75rem);
+  line-height: 0.92;
+}
+
+.hero-course {
+  max-width: 32ch;
+  margin: 16px 0 0;
+  font-size: 1.125rem;
+  color: var(--muted);
+}
+
+.hero-text {
+  max-width: 42ch;
+  margin: 24px 0 0;
+}
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 36px;
+}
+
+.button {
+  display: inline-block;
+  padding: 12px 28px;
+  border: 2px solid var(--ink);
+  border-radius: 6px;
+  color: var(--ink);
+  font-weight: 600;
+  font-size: 1rem;
+  text-decoration: none;
+  transition: background-color 0.15s, color 0.15s, border-color 0.15s;
+}
+
+.button:hover {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.button-primary {
+  border-color: var(--signal);
+  background: var(--signal);
+  color: #fff;
+}
+
+.button-primary:hover {
+  border-color: var(--signal-dark);
+  background: var(--signal-dark);
+  color: #fff;
+}
+
+.button:focus-visible,
+a:focus-visible {
+  outline: 3px solid var(--packet);
+  outline-offset: 3px;
+}
+
+.network {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.network-link {
+  stroke: var(--wire);
+  stroke-width: 2;
+}
+
+.router-body {
+  fill: var(--signal);
+}
+
+.router-arrows {
+  fill: none;
+  stroke: #fff;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.host-screen {
+  fill: var(--paper);
+  stroke: var(--ink);
+  stroke-width: 2;
+}
+
+.host-stand {
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+
+.node-label {
+  fill: var(--muted);
+  font: 600 15px "Barlow", Arial, sans-serif;
+}
+
+.packet {
+  fill: var(--packet);
+  stroke: var(--ink);
+  stroke-width: 1.5;
+}
+
+.page {
+  flex: 1;
+  width: 100%;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 64px 40px;
+}
+
+.page-title {
+  margin-bottom: 16px;
+  font-size: clamp(2.5rem, 6vw, 4rem);
+  line-height: 1;
+}
+
+.page p {
+  max-width: 60ch;
+  margin: 0 0 32px;
+}
+
+.site-footer {
+  width: 100%;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 20px 40px 28px;
+  font-size: 0.9375rem;
+}
+
+@media (max-width: 820px) {
+  .hero {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 32px;
+    padding: 40px 24px;
+  }
+
+  .page,
+  .site-footer {
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .packet {
+    display: none;
+  }
+
+  .button {
+    transition: none;
+  }
 }

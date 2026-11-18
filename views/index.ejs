@@ -1,11 +1,19 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title><%= title %></title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
-  </head>
+<html lang="es">
+  <%- include('partials/head') %>
   <body>
-    <h1><%= title %></h1>
-    <p>Bienvenidos al <%= title %></p>
+    <main class="hero">
+      <div class="hero-content">
+        <h1 class="hero-title"><%= title %></h1>
+        <p class="hero-course">Tecnologías y Arquitecturas de Redes de Comunicación Emergentes</p>
+        <p class="hero-text">Una red de equipos y routers que intercambian paquetes. Lanza la simulación para ver cómo se encamina el tráfico.</p>
+        <div class="hero-actions">
+          <a class="button button-primary" href="/simulate">Simulate</a>
+          <a class="button" href="/about">About</a>
+        </div>
+      </div>
+      <%- include('partials/network') %>
+    </main>
+    <%- include('partials/footer') %>
   </body>
 </html>

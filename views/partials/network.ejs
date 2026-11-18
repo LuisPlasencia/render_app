@@ -1,0 +1,61 @@
+<svg class="network" viewBox="0 0 530 430" role="img" aria-label="Red de ejemplo: seis equipos conectados a través de tres routers, con paquetes viajando entre ellos">
+  <defs>
+    <g id="router-icon">
+      <circle r="24" class="router-body"/>
+      <path d="M-11 -6 H9 M5 -10 L9 -6 L5 -2 M11 6 H-9 M-5 2 L-9 6 L-5 10" class="router-arrows"/>
+    </g>
+    <g id="host-icon">
+      <rect x="-17" y="-13" width="34" height="22" rx="3" class="host-screen"/>
+      <path d="M-7 15 H7 M0 9 V15" class="host-stand"/>
+    </g>
+  </defs>
+
+  <g class="network-links">
+    <line x1="70" y1="70" x2="180" y2="160" class="network-link"/>
+    <line x1="60" y1="250" x2="180" y2="160" class="network-link"/>
+    <line x1="180" y1="160" x2="350" y2="130" class="network-link"/>
+    <line x1="180" y1="160" x2="270" y2="290" class="network-link"/>
+    <line x1="350" y1="130" x2="270" y2="290" class="network-link"/>
+    <line x1="350" y1="130" x2="460" y2="50" class="network-link"/>
+    <line x1="350" y1="130" x2="470" y2="230" class="network-link"/>
+    <line x1="270" y1="290" x2="170" y2="380" class="network-link"/>
+    <line x1="270" y1="290" x2="400" y2="380" class="network-link"/>
+  </g>
+
+  <!-- Each packet follows a host > router > router > host route along the links above -->
+  <g class="packets">
+    <circle r="5" class="packet">
+      <animateMotion dur="3.6s" repeatCount="indefinite" path="M70 70 L180 160 L350 130 L470 230"/>
+    </circle>
+    <circle r="5" class="packet">
+      <animateMotion dur="3.6s" begin="-1.2s" repeatCount="indefinite" path="M60 250 L180 160 L270 290 L400 380"/>
+    </circle>
+    <circle r="5" class="packet">
+      <animateMotion dur="3.6s" begin="-2.4s" repeatCount="indefinite" path="M460 50 L350 130 L270 290 L170 380"/>
+    </circle>
+  </g>
+
+  <g class="network-nodes">
+    <use href="#router-icon" transform="translate(180 160)"/>
+    <use href="#router-icon" transform="translate(350 130)"/>
+    <use href="#router-icon" transform="translate(270 290)"/>
+    <use href="#host-icon" transform="translate(70 70)"/>
+    <use href="#host-icon" transform="translate(60 250)"/>
+    <use href="#host-icon" transform="translate(460 50)"/>
+    <use href="#host-icon" transform="translate(470 230)"/>
+    <use href="#host-icon" transform="translate(170 380)"/>
+    <use href="#host-icon" transform="translate(400 380)"/>
+  </g>
+
+  <g class="node-labels">
+    <text x="180" y="204" text-anchor="middle" class="node-label">R1</text>
+    <text x="350" y="94" text-anchor="middle" class="node-label">R2</text>
+    <text x="270" y="338" text-anchor="middle" class="node-label">R3</text>
+    <text x="70" y="104" text-anchor="middle" class="node-label">H1</text>
+    <text x="60" y="284" text-anchor="middle" class="node-label">H2</text>
+    <text x="460" y="84" text-anchor="middle" class="node-label">H3</text>
+    <text x="470" y="264" text-anchor="middle" class="node-label">H4</text>
+    <text x="170" y="414" text-anchor="middle" class="node-label">H5</text>
+    <text x="400" y="414" text-anchor="middle" class="node-label">H6</text>
+  </g>
+</svg>
