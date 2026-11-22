@@ -6,7 +6,9 @@
     "start": "node ./bin/www"
   },
   "dependencies": {
+    "chart.js": "^4.6.1",
     "cookie-parser": "~1.4.4",
+    "cytoscape": "^3.35.0",
     "debug": "~2.6.9",
     "ejs": "^7.0.2",
     "express": "^4.22.3",

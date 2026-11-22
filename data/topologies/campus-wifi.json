@@ -1,0 +1,27 @@
+{
+  "name": "Campus con WiFi y granja de bots",
+  "description": "Dos routers de núcleo, un campus con WiFi compartida por humanos móviles y de escritorio, acceso 5G, sensores LPWAN y una granja de bots.",
+  "nodes": [
+    { "id": "R1", "type": "router", "label": "R1", "ip": "10.0.0.1", "position": { "x": 260, "y": 200 } },
+    { "id": "R2", "type": "router", "label": "R2", "ip": "10.0.0.2", "position": { "x": 460, "y": 200 } },
+
+    { "id": "wifi", "type": "access", "label": "WiFi campus", "accessTechnology": "wifi", "subnet": "10.1.0.0/24", "hostedAgentClasses": ["human-mobile", "human-desktop"], "position": { "x": 60, "y": 110 } },
+    { "id": "ran5g", "type": "access", "label": "Acceso 5G", "accessTechnology": "5g", "subnet": "10.2.0.0/24", "hostedAgentClasses": ["human-mobile"], "position": { "x": 60, "y": 300 } },
+    { "id": "botfarm", "type": "access", "label": "Granja de bots", "accessTechnology": "datacenter", "subnet": "10.3.0.0/24", "hostedAgentClasses": ["bot", "genai"], "position": { "x": 460, "y": 390 } },
+    { "id": "lpwan", "type": "access", "label": "Sensores campus", "accessTechnology": "lpwan", "subnet": "10.4.0.0/24", "hostedAgentClasses": ["sensor"], "position": { "x": 260, "y": 30 } },
+
+    { "id": "web", "type": "server", "label": "Servidor web", "service": "web", "ip": "10.10.0.20", "position": { "x": 680, "y": 80 } },
+    { "id": "social", "type": "server", "label": "Red social", "service": "social", "ip": "10.10.0.10", "position": { "x": 680, "y": 200 } },
+    { "id": "iot", "type": "server", "label": "Plataforma IoT", "service": "iot", "ip": "10.10.0.30", "position": { "x": 680, "y": 320 } }
+  ],
+  "links": [
+    { "id": "R1-R2", "source": "R1", "target": "R2", "latencyMs": 8, "bandwidthMbps": 10000, "lossRate": 0.0001 },
+    { "id": "wifi-R1", "source": "wifi", "target": "R1", "latencyMs": 6, "bandwidthMbps": 200, "lossRate": 0.002 },
+    { "id": "ran5g-R1", "source": "ran5g", "target": "R1", "latencyMs": 15, "bandwidthMbps": 300, "lossRate": 0.005 },
+    { "id": "lpwan-R1", "source": "lpwan", "target": "R1", "latencyMs": 40, "bandwidthMbps": 0.25, "lossRate": 0.02 },
+    { "id": "botfarm-R2", "source": "botfarm", "target": "R2", "latencyMs": 2, "bandwidthMbps": 10000, "lossRate": 0.0001 },
+    { "id": "web-R2", "source": "web", "target": "R2", "latencyMs": 3, "bandwidthMbps": 10000, "lossRate": 0.0001 },
+    { "id": "social-R2", "source": "social", "target": "R2", "latencyMs": 3, "bandwidthMbps": 10000, "lossRate": 0.0001 },
+    { "id": "iot-R2", "source": "iot", "target": "R2", "latencyMs": 3, "bandwidthMbps": 10000, "lossRate": 0.0001 }
+  ]
+}

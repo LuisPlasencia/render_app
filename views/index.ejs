@@ -2,14 +2,15 @@
 <html lang="es">
   <%- include('partials/head') %>
   <body>
+    <%- include('partials/nav') %>
     <main class="hero">
       <div class="hero-content">
         <h1 class="hero-title"><%= title %></h1>
         <p class="hero-course">Tecnologías y Arquitecturas de Redes de Comunicación Emergentes</p>
-        <p class="hero-text">Una red de equipos y routers que intercambian paquetes. Lanza la simulación para ver cómo se encamina el tráfico.</p>
+        <p class="hero-text">Una red IP con sus redes de acceso donde conviven humanos, bots, agentes de IA generativa y sensores. Lanza la simulación para ver qué parte del tráfico y del contenido sigue siendo humana.</p>
         <div class="hero-actions">
-          <a class="button button-primary" href="/simulate">Simulate</a>
-          <a class="button" href="/about">About</a>
+          <a class="button button-primary" href="/simulate">Simulador</a>
+          <a class="button" href="/about">Acerca de</a>
         </div>
       </div>
       <%- include('partials/network') %>
