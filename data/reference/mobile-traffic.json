@@ -1,0 +1,48 @@
+{
+  "title": "Tráfico en redes móviles",
+  "sourceName": "Ericsson Mobility Report",
+  "retrievedAt": "2026-11-22",
+  "note": "Datos publicados por Ericsson a partir de mediciones en redes de operadores. No distinguen entre humanos y bots y se miden en bytes, no en peticiones.",
+  "indicators": [
+    {
+      "id": "video-share",
+      "label": "Vídeo en el tráfico de datos móvil",
+      "value": 75,
+      "unit": "%",
+      "approximate": true,
+      "period": "finales de 2025",
+      "measure": "bytes",
+      "sourceUrl": "https://www.ericsson.com/en/mobility-report/dataforecasts/mobile-traffic-update"
+    },
+    {
+      "id": "video-share-measured",
+      "label": "Vídeo medido en cuatro operadores europeos",
+      "value": 50,
+      "unit": "%",
+      "approximate": true,
+      "period": "noviembre de 2025",
+      "measure": "bytes",
+      "sourceUrl": "https://www.ericsson.com/en/reports-and-papers/mobility-report/articles/short-form-dominates-video-traffic"
+    },
+    {
+      "id": "five-g-share",
+      "label": "Tráfico móvil cursado por 5G",
+      "value": 48,
+      "unit": "%",
+      "approximate": false,
+      "period": "finales de 2025",
+      "measure": "bytes",
+      "sourceUrl": "https://www.ericsson.com/en/mobility-report/dataforecasts/mobile-traffic-forecast"
+    },
+    {
+      "id": "smartphone-monthly-data",
+      "label": "Datos al mes por smartphone activo",
+      "value": 22,
+      "unit": "GB",
+      "approximate": false,
+      "period": "finales de 2025",
+      "measure": "bytes",
+      "sourceUrl": "https://www.ericsson.com/en/mobility-report/dataforecasts/mobile-traffic-forecast"
+    }
+  ]
+}

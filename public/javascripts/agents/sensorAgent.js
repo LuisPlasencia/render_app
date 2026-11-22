@@ -6,6 +6,10 @@ const REPORTING_JITTER_SECONDS = 0.2;
 
 // Deterministic telemetry: periodic small reports, automated by design rather than deceptive
 export class SensorAgent extends Agent {
+  static getExpectedRequestsPerSecond() {
+    return 1 / REPORTING_PERIOD_SECONDS;
+  }
+
   getInitialActivationDelaySeconds(random) {
     return random.uniform(0, REPORTING_PERIOD_SECONDS);
   }

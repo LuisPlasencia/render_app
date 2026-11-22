@@ -13,12 +13,12 @@ function toFileName(topologyName) {
 }
 
 // An experiment file bundles the topology with the seed and population so that a run can be reproduced
-export function downloadExperiment({ topologyDefinition, seed, populationByClass }) {
+export function downloadExperiment({ topologyDefinition, seed, populationByClass, trafficProfile }) {
   const experiment = {
     formatVersion: EXPERIMENT_FORMAT_VERSION,
     exportedAt: new Date().toISOString(),
     topology: topologyDefinition,
-    simulation: { seed, populationByClass }
+    simulation: { seed, populationByClass, trafficProfile }
   };
   const fileUrl = URL.createObjectURL(new Blob([JSON.stringify(experiment, null, 2)], { type: 'application/json' }));
   const downloadLink = document.createElement('a');

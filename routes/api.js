@@ -1,6 +1,7 @@
 var express = require('express');
 var createError = require('http-errors');
 var topologyRepository = require('../services/topologyRepository');
+var referenceRepository = require('../services/referenceRepository');
 var router = express.Router();
 
 /* GET available topologies (id and display name). */
@@ -20,6 +21,15 @@ router.get('/topologies/:topologyName', async function(req, res, next) {
       return next(createError(404, 'Topology not found'));
     }
     res.json(topology);
+  } catch (error) {
+    next(error);
+  }
+});
+
+/* GET published reference indicators about mobile network traffic. */
+router.get('/reference/mobile-traffic', async function(req, res, next) {
+  try {
+    res.json(await referenceRepository.loadReference('mobile-traffic'));
   } catch (error) {
     next(error);
   }

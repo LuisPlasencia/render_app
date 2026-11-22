@@ -1,41 +1,59 @@
 import { TRAFFIC_CLASSES } from '../shared/trafficClasses.js';
+import { CONTENT_CATEGORIES } from '../shared/contentCategories.js';
 
 const VISIBLE_WINDOW_COUNT = 60;
 const AREA_FILL_OPACITY_HEX = 'B3';
 const ChartLibrary = globalThis.Chart;
 
-export const COUNT_KEY_BY_UNIT = { bytes: 'bytesByClass', messages: 'messagesByClass' };
+export const CHART_GROUPINGS = {
+  class: {
+    title: 'Reparto del tráfico por tipo de emisor',
+    series: TRAFFIC_CLASSES,
+    countKeyByUnit: { bytes: 'bytesByClass', messages: 'messagesByClass' }
+  },
+  category: {
+    title: 'Reparto del tráfico por tipo de contenido',
+    series: CONTENT_CATEGORIES,
+    countKeyByUnit: { bytes: 'bytesByCategory', messages: 'messagesByCategory' }
+  }
+};
 
-export function computeSharesByClass(window, unit) {
-  const countByClass = window[COUNT_KEY_BY_UNIT[unit]];
-  const total = Object.values(countByClass).reduce((sum, count) => sum + count, 0);
+export function computeShares(countById) {
+  const total = Object.values(countById).reduce((sum, count) => sum + count, 0);
   return Object.fromEntries(
-    Object.entries(countByClass).map(([trafficClassId, count]) => [trafficClassId, total > 0 ? (100 * count) / total : 0])
+    Object.entries(countById).map(([seriesId, count]) => [seriesId, total > 0 ? (100 * count) / total : 0])
   );
 }
 
-// Stacked area chart: each band is the share of one traffic class in a one-second window
+export function computeWindowShares(window, grouping, unit) {
+  return computeShares(window[CHART_GROUPINGS[grouping].countKeyByUnit[unit]]);
+}
+
+function createDatasets(series) {
+  return series.map((seriesEntry, seriesIndex) => ({
+    label: seriesEntry.label,
+    data: [],
+    borderColor: seriesEntry.color,
+    backgroundColor: seriesEntry.color + AREA_FILL_OPACITY_HEX,
+    fill: seriesIndex === 0 ? 'origin' : '-1',
+    pointRadius: 0,
+    borderWidth: 1,
+    tension: 0.2
+  }));
+}
+
+// Stacked area chart: each band is the share of one series (emitter class or content category) in a one-second window
 export class TrafficShareChart {
-  constructor(canvasElement) {
+  constructor(canvasElement, titleElement) {
+    this.titleElement = titleElement;
     this.windows = [];
     this.unit = 'bytes';
+    this.grouping = 'class';
     ChartLibrary.defaults.font.family = 'Barlow, Helvetica Neue, Arial, sans-serif';
     ChartLibrary.defaults.color = '#4E6073';
     this.chart = new ChartLibrary(canvasElement, {
       type: 'line',
-      data: {
-        labels: [],
-        datasets: TRAFFIC_CLASSES.map((trafficClass, classIndex) => ({
-          label: trafficClass.label,
-          data: [],
-          borderColor: trafficClass.color,
-          backgroundColor: trafficClass.color + AREA_FILL_OPACITY_HEX,
-          fill: classIndex === 0 ? 'origin' : '-1',
-          pointRadius: 0,
-          borderWidth: 1,
-          tension: 0.2
-        }))
-      },
+      data: { labels: [], datasets: createDatasets(CHART_GROUPINGS[this.grouping].series) },
       options: {
         animation: false,
         responsive: true,
@@ -66,17 +84,25 @@ export class TrafficShareChart {
     this.render();
   }
 
+  setGrouping(grouping) {
+    this.grouping = grouping;
+    this.chart.data.datasets = createDatasets(CHART_GROUPINGS[grouping].series);
+    this.titleElement.textContent = CHART_GROUPINGS[grouping].title;
+    this.render();
+  }
+
   clear() {
     this.windows = [];
     this.render();
   }
 
   render() {
-    const sharesPerWindow = this.windows.map((window) => computeSharesByClass(window, this.unit));
+    const { series } = CHART_GROUPINGS[this.grouping];
+    const sharesPerWindow = this.windows.map((window) => computeWindowShares(window, this.grouping, this.unit));
     this.chart.data.labels = this.windows.map((window) => window.endTime.toFixed(0));
-    this.chart.data.datasets.forEach((dataset, classIndex) => {
-      const trafficClassId = TRAFFIC_CLASSES[classIndex].id;
-      dataset.data = sharesPerWindow.map((sharesByClass) => sharesByClass[trafficClassId]);
+    this.chart.data.datasets.forEach((dataset, seriesIndex) => {
+      const seriesId = series[seriesIndex].id;
+      dataset.data = sharesPerWindow.map((shares) => shares[seriesId]);
     });
     this.chart.update('none');
   }

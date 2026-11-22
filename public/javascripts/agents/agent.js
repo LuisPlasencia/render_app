@@ -8,6 +8,11 @@ export class Agent {
 
   initialize(random) {}
 
+  // Mean rate of HTTP requests sent by one agent, used to calibrate populations against measured traffic shares
+  static getExpectedRequestsPerSecond() {
+    throw new Error('getExpectedRequestsPerSecond must be implemented by each agent type');
+  }
+
   getInitialActivationDelaySeconds(random) {
     return random.uniform(0, 3);
   }

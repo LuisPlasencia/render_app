@@ -70,7 +70,8 @@ export class TopologyEditor {
   }
 
   validate() {
-    return validateTopology(this.topologyDocument.definition, this.getSimulationSettings().populationByClass);
+    const { populationByClass, trafficProfile } = this.getSimulationSettings();
+    return validateTopology(this.topologyDocument.definition, populationByClass, trafficProfile);
   }
 
   revalidate() {

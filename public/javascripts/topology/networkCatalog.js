@@ -33,7 +33,8 @@ export const CORE_LINK_DEFAULTS = { latencyMs: 8, bandwidthMbps: 10000, lossRate
 export const SERVER_SERVICES = {
   web: { label: 'Servidor web', usedBy: 'humanos y bots' },
   social: { label: 'Red social', usedBy: 'humanos, bots y agentes GenIA' },
-  iot: { label: 'Plataforma IoT', usedBy: 'sensores' }
+  iot: { label: 'Plataforma IoT', usedBy: 'sensores' },
+  video: { label: 'Plataforma de vídeo', usedBy: 'humanos y bots' }
 };
 
 export const DEFAULT_SERVER_SERVICE = 'web';

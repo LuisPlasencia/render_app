@@ -11,6 +11,11 @@ router.get('/simulate', function(req, res, next) {
   res.render('simulate', { title: 'Simulador | Trabajo de TARCE', currentPage: 'simulate' });
 });
 
+/* GET real Internet data page. */
+router.get('/data', function(req, res, next) {
+  res.render('data', { title: 'Internet real | Trabajo de TARCE', currentPage: 'data' });
+});
+
 /* GET about page. */
 router.get('/about', function(req, res, next) {
   res.render('about', { title: 'Acerca de | Trabajo de TARCE', currentPage: 'about' });

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="es">
+  <%- include('partials/head') %>
+  <body>
+    <%- include('partials/nav') %>
+    <main class="page data-page">
+      <h1 class="page-title">Internet real</h1>
+      <p class="page-lead">Mediciones públicas del tráfico de Internet: qué parte es humana y qué parte automatizada, desde qué dispositivos llega, qué contenidos se piden y quién pide el multimedia. Con ellas puedes calibrar el simulador.</p>
+      <p class="simulation-disclaimer">Cloudflare Radar cuenta peticiones HTTP que pasan por la red de Cloudflare, no bytes ni todo Internet. "Móvil" es el dispositivo que declara la petición, no la red celular. Las cifras de Ericsson sí miden bytes en redes móviles, pero no distinguen humanos de bots.</p>
+
+      <div class="data-controls">
+        <label class="control-field control-field-inline">
+          <span>País</span>
+          <select id="location-select"></select>
+        </label>
+        <label class="control-field control-field-inline">
+          <span>Periodo</span>
+          <select id="date-range-select"></select>
+        </label>
+      </div>
+      <p id="data-status" class="panel-message" role="alert" hidden></p>
+
+      <section id="radar-dashboard" class="data-grid" aria-label="Datos de Cloudflare Radar">
+        <article id="section-human-vs-bot" class="chart-card data-card">
+          <h2 class="chart-title">Humanos frente a bots</h2>
+          <p class="section-headline"></p>
+          <p class="section-error panel-hint" hidden></p>
+          <div class="chart-canvas-wrapper chart-canvas-short"><canvas></canvas></div>
+        </article>
+        <article id="section-devices" class="chart-card data-card">
+          <h2 class="chart-title">Dispositivo según el emisor</h2>
+          <p class="section-headline"></p>
+          <p class="section-error panel-hint" hidden></p>
+          <div class="chart-canvas-wrapper chart-canvas-short"><canvas></canvas></div>
+        </article>
+        <article id="section-multimedia" class="chart-card data-card">
+          <h2 class="chart-title">¿Quién pide el multimedia?</h2>
+          <p class="section-headline"></p>
+          <p class="section-error panel-hint" hidden></p>
+          <div class="chart-canvas-wrapper chart-canvas-medium"><canvas></canvas></div>
+        </article>
+        <article id="section-ai-crawlers" class="chart-card data-card">
+          <h2 class="chart-title">Rastreadores de IA por propósito</h2>
+          <p class="section-error panel-hint" hidden></p>
+          <div class="chart-canvas-wrapper chart-canvas-medium"><canvas></canvas></div>
+        </article>
+        <article id="section-content-types" class="chart-card data-card data-card-wide">
+          <h2 class="chart-title">Tipos de contenido de las respuestas</h2>
+          <p class="panel-hint">Porcentaje de peticiones de cada tipo dentro del tráfico total, del humano y del automatizado.</p>
+          <p class="section-error panel-hint" hidden></p>
+          <div class="chart-canvas-wrapper"><canvas></canvas></div>
+        </article>
+        <p id="radar-last-updated" class="panel-hint data-card-wide"></p>
+      </section>
+
+      <section class="data-section" aria-labelledby="mobile-reference-title">
+        <h2 id="mobile-reference-title" class="chart-title">Tráfico en redes móviles</h2>
+        <p class="panel-hint">Indicadores publicados por Ericsson a partir de mediciones en redes de operadores, en bytes.</p>
+        <div id="mobile-reference" class="stats-grid"></div>
+      </section>
+
+      <section class="chart-card data-section" aria-labelledby="calibration-title">
+        <h2 id="calibration-title" class="chart-title">Calibrar el simulador</h2>
+        <p class="panel-hint">Ajusta la población de agentes y el perfil de vídeo para que el simulador reproduzca las proporciones medidas. El reparto entre bots clásicos y agentes GenIA mantiene la proporción por defecto, porque Radar no lo separa.</p>
+        <label class="control-field control-field-inline">
+          <span>Vídeo de los humanos según</span>
+          <select id="video-target-select">
+            <option value="radar-requests" selected>Peticiones medidas por Radar</option>
+            <option value="mobile-bytes">Bytes en redes móviles (Ericsson)</option>
+          </select>
+        </label>
+        <ul id="calibration-preview" class="calibration-preview"></ul>
+        <button type="button" id="calibrate-button" class="button button-primary" disabled>Calibrar y abrir el simulador</button>
+      </section>
+
+      <section class="data-section data-sources" aria-labelledby="sources-title">
+        <h2 id="sources-title" class="chart-title">Fuentes</h2>
+        <ul>
+          <li><a href="https://radar.cloudflare.com/" target="_blank" rel="noopener">Cloudflare Radar</a>, datos de la API bajo licencia CC BY-NC 4.0.</li>
+          <li><a href="https://www.ericsson.com/en/reports-and-papers/mobility-report" target="_blank" rel="noopener">Ericsson Mobility Report</a>.</li>
+        </ul>
+      </section>
+    </main>
+    <%- include('partials/footer') %>
+    <script src="/vendor/chart.js/chart.umd.min.js"></script>
+    <script type="module" src="/javascripts/pages/dataPage.js"></script>
+  </body>
+</html>

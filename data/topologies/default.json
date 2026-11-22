@@ -13,7 +13,8 @@
 
     { "id": "web", "type": "server", "label": "Servidor web", "service": "web", "ip": "10.10.0.20", "position": { "x": 720, "y": 60 } },
     { "id": "social", "type": "server", "label": "Red social", "service": "social", "ip": "10.10.0.10", "position": { "x": 720, "y": 230 } },
-    { "id": "iot", "type": "server", "label": "Plataforma IoT", "service": "iot", "ip": "10.10.0.30", "position": { "x": 720, "y": 400 } }
+    { "id": "iot", "type": "server", "label": "Plataforma IoT", "service": "iot", "ip": "10.10.0.30", "position": { "x": 720, "y": 400 } },
+    { "id": "video", "type": "server", "label": "Plataforma de vídeo", "service": "video", "ip": "10.10.0.40", "position": { "x": 660, "y": 470 } }
   ],
   "links": [
     { "id": "R1-R2", "source": "R1", "target": "R2", "latencyMs": 8, "bandwidthMbps": 10000, "lossRate": 0.0001 },
@@ -27,6 +28,7 @@
 
     { "id": "web-R2", "source": "web", "target": "R2", "latencyMs": 3, "bandwidthMbps": 10000, "lossRate": 0.0001 },
     { "id": "social-R3", "source": "social", "target": "R3", "latencyMs": 3, "bandwidthMbps": 10000, "lossRate": 0.0001 },
-    { "id": "iot-R3", "source": "iot", "target": "R3", "latencyMs": 3, "bandwidthMbps": 10000, "lossRate": 0.0001 }
+    { "id": "iot-R3", "source": "iot", "target": "R3", "latencyMs": 3, "bandwidthMbps": 10000, "lossRate": 0.0001 },
+    { "id": "video-R3", "source": "video", "target": "R3", "latencyMs": 3, "bandwidthMbps": 10000, "lossRate": 0.0001 }
   ]
 }

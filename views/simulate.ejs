@@ -46,6 +46,10 @@
               <legend>Población de agentes</legend>
               <div id="population-controls"></div>
             </fieldset>
+            <fieldset class="population-fieldset">
+              <legend>Perfil de tráfico</legend>
+              <div id="traffic-profile-controls"></div>
+            </fieldset>
           </div>
 
           <div id="editor-panel" role="tabpanel" aria-labelledby="editor-tab" class="control-panel editor-panel" hidden>
@@ -94,14 +98,23 @@
         <div id="stats-grid" class="stats-grid"></div>
         <div class="chart-card">
           <div class="chart-header">
-            <h2 class="chart-title">Reparto del tráfico por tipo de emisor</h2>
-            <label class="control-field control-field-inline">
-              <span>Unidad</span>
-              <select id="unit-select">
-                <option value="bytes" selected>Bytes</option>
-                <option value="messages">Mensajes</option>
-              </select>
-            </label>
+            <h2 id="chart-title" class="chart-title">Reparto del tráfico por tipo de emisor</h2>
+            <div class="chart-options">
+              <label class="control-field control-field-inline">
+                <span>Agrupar por</span>
+                <select id="grouping-select">
+                  <option value="class" selected>Emisor</option>
+                  <option value="category">Contenido</option>
+                </select>
+              </label>
+              <label class="control-field control-field-inline">
+                <span>Unidad</span>
+                <select id="unit-select">
+                  <option value="bytes" selected>Bytes</option>
+                  <option value="messages">Mensajes</option>
+                </select>
+              </label>
+            </div>
           </div>
           <div class="chart-canvas-wrapper">
             <canvas id="traffic-share-chart"></canvas>

@@ -1,0 +1,1 @@
+export const MAXIMUM_AGENTS_PER_CLASS = 40;

@@ -4,8 +4,11 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
+require('./services/environmentFile').loadEnvironmentFile(path.join(__dirname, '.env'));
+
 var indexRouter = require('./routes/index');
 var apiRouter = require('./routes/api');
+var radarRouter = require('./routes/radar');
 
 var app = express();
 
@@ -23,6 +26,7 @@ app.use('/vendor/cytoscape', express.static(path.join(__dirname, 'node_modules',
 app.use('/vendor/chart.js', express.static(path.join(__dirname, 'node_modules', 'chart.js', 'dist')));
 
 app.use('/', indexRouter);
+app.use('/api/radar', radarRouter);
 app.use('/api', apiRouter);
 
 // catch 404 and forward to error handler

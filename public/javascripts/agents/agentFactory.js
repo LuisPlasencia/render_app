@@ -4,7 +4,7 @@ import { GenAiAgent } from './genAiAgent.js';
 import { SensorAgent } from './sensorAgent.js';
 import { SubnetAddressAllocator } from '../topology/ipAddressing.js';
 
-const AGENT_TYPE_BY_TRAFFIC_CLASS = {
+export const AGENT_TYPE_BY_TRAFFIC_CLASS = {
   'human-mobile': HumanAgent,
   'human-desktop': HumanAgent,
   bot: BotAgent,

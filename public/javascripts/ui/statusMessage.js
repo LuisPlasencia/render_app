@@ -3,9 +3,14 @@ export class StatusMessage {
     this.element = element;
   }
 
-  show(message) {
+  show(message, severity = 'error') {
     this.element.textContent = message;
+    this.element.dataset.severity = severity;
     this.element.hidden = false;
+  }
+
+  isShowingError() {
+    return this.isVisible() && this.element.dataset.severity === 'error';
   }
 
   isVisible() {

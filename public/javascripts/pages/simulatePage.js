@@ -11,6 +11,7 @@ import { SimulationControls } from '../ui/simulationControls.js';
 import { ModeTabs, PAGE_MODES } from '../ui/modeTabs.js';
 import { StatusMessage } from '../ui/statusMessage.js';
 import { TopologyEditor } from '../editor/topologyEditor.js';
+import { takeRequestedCalibrationProfile } from '../calibration/calibrationStore.js';
 
 const DEFAULT_TOPOLOGY_ID = 'default';
 const INVALID_TOPOLOGY_MESSAGE = 'La red tiene errores. Revísalos en el editor de red antes de simular.';
@@ -36,7 +37,10 @@ async function initializeSimulatePage() {
   });
 
   const packetRenderer = new PacketRenderer(document.getElementById('packet-layer'), topologyView);
-  const trafficShareChart = new TrafficShareChart(document.getElementById('traffic-share-chart'));
+  const trafficShareChart = new TrafficShareChart(
+    document.getElementById('traffic-share-chart'),
+    document.getElementById('chart-title')
+  );
   const statsPanel = new StatsPanel(document.getElementById('stats-grid'));
   const simulationStatus = new StatusMessage(document.getElementById('simulation-status'));
   renderTrafficLegend(document.getElementById('traffic-legend'));
@@ -85,8 +89,17 @@ async function initializeSimulatePage() {
 
   const getSimulationSettings = () => ({
     seed: simulationControls.getSeed(),
-    populationByClass: simulationControls.getPopulationByClass()
+    populationByClass: simulationControls.getPopulationByClass(),
+    trafficProfile: simulationControls.getTrafficProfile()
   });
+
+  const applySimulationSettings = (simulation) => {
+    simulationControls.setSeed(simulation.seed);
+    simulationControls.setPopulationByClass(simulation.populationByClass || {});
+    if (simulation.trafficProfile) {
+      simulationControls.setTrafficProfile(simulation.trafficProfile);
+    }
+  };
 
   // Returns false when the network cannot be simulated with the current population
   const restartSimulation = () => {
@@ -98,13 +111,19 @@ async function initializeSimulatePage() {
     totalMessages = 0;
 
     const simulationSettings = getSimulationSettings();
-    const validationReport = validateTopology(topologyDocument.definition, simulationSettings.populationByClass);
+    const validationReport = validateTopology(
+      topologyDocument.definition,
+      simulationSettings.populationByClass,
+      simulationSettings.trafficProfile
+    );
     if (!validationReport.isValid()) {
       setRunning(false);
       simulationStatus.show(INVALID_TOPOLOGY_MESSAGE);
       return false;
     }
-    simulationStatus.hide();
+    if (simulationStatus.isShowingError()) {
+      simulationStatus.hide();
+    }
     simulationClient.configure({ topologyDefinition: topologyDocument.toDefinition(), ...simulationSettings });
     return true;
   };
@@ -116,10 +135,12 @@ async function initializeSimulatePage() {
       speedSelect: document.getElementById('speed-select'),
       seedInput: document.getElementById('seed-input'),
       unitSelect: document.getElementById('unit-select'),
-      populationContainer: document.getElementById('population-controls')
+      groupingSelect: document.getElementById('grouping-select'),
+      populationContainer: document.getElementById('population-controls'),
+      trafficProfileContainer: document.getElementById('traffic-profile-controls')
     },
     onPlayToggle: () => {
-      if (!isRunning && simulationStatus.isVisible()) {
+      if (!isRunning && simulationStatus.isShowingError()) {
         return;
       }
       setRunning(!isRunning);
@@ -130,11 +151,16 @@ async function initializeSimulatePage() {
       restartSimulation();
       topologyEditor.revalidate();
     },
+    onTrafficProfileChange: () => {
+      restartSimulation();
+      topologyEditor.revalidate();
+    },
     onSeedChange: restartSimulation,
     onUnitChange: (unit) => {
       trafficShareChart.setUnit(unit);
       statsPanel.setUnit(unit);
-    }
+    },
+    onGroupingChange: (grouping) => trafficShareChart.setGrouping(grouping)
   });
 
   const modeTabs = new ModeTabs({
@@ -192,10 +218,7 @@ async function initializeSimulatePage() {
       validationList: document.getElementById('validation-list')
     },
     getSimulationSettings,
-    onSimulationSettingsImported: (simulation) => {
-      simulationControls.setSeed(simulation.seed);
-      simulationControls.setPopulationByClass(simulation.populationByClass || {});
-    },
+    onSimulationSettingsImported: applySimulationSettings,
     onApply: leaveEditor
   });
   topologyEditor.initializePresets(DEFAULT_TOPOLOGY_ID);
@@ -203,8 +226,17 @@ async function initializeSimulatePage() {
   modeTabs.show(PAGE_MODES.SIMULATION);
   simulationClient.setSpeed(simulationControls.getSpeed());
   trafficShareChart.setUnit(simulationControls.getUnit());
+  trafficShareChart.setGrouping(simulationControls.getGrouping());
   statsPanel.setUnit(simulationControls.getUnit());
-  restartSimulation();
+
+  const calibrationProfile = takeRequestedCalibrationProfile();
+  if (calibrationProfile) {
+    applySimulationSettings({ seed: simulationControls.getSeed(), ...calibrationProfile.simulation });
+    topologyEditor.revalidate();
+  }
+  if (restartSimulation() && calibrationProfile) {
+    simulationStatus.show(`Simulador calibrado con datos reales: ${calibrationProfile.sourceDescription}.`, 'info');
+  }
 }
 
 initializeSimulatePage();

@@ -7,6 +7,8 @@ import { ContentPlatform } from './contentPlatform.js';
 import { MetricsCollector } from './metricsCollector.js';
 import { REQUEST_SIZES_BYTES } from './messageCatalog.js';
 import { handleMessageAtServer } from './serverResponder.js';
+import { CONTENT_CATEGORY_BY_SERVICE } from '../shared/contentCategories.js';
+import { normalizeTrafficProfile } from '../shared/trafficProfile.js';
 
 const METRICS_WINDOW_SECONDS = 1;
 const SERVER_PROCESSING_DELAY_SECONDS = 0.005;
@@ -17,7 +19,7 @@ const EVENT_TYPES = {
 };
 
 export class SimulationEngine {
-  constructor({ topologyDefinition, populationByClass, seed }) {
+  constructor({ topologyDefinition, populationByClass, seed, trafficProfile }) {
     this.topology = new TopologyModel(topologyDefinition);
     this.routingTable = new RoutingTable(this.topology);
     this.random = new SeededRandom(seed);
@@ -29,6 +31,7 @@ export class SimulationEngine {
     this.pendingTransmissions = [];
     this.agentContext = {
       random: this.random,
+      trafficProfile: normalizeTrafficProfile(trafficProfile),
       contentPlatform: this.contentPlatform,
       getCurrentTime: () => this.currentTime,
       sendToService: (agent, serviceName, messageKind, payload) =>
@@ -82,6 +85,7 @@ export class SimulationEngine {
     this.transmit({
       trafficClassId: agent.trafficClassId,
       kind: messageKind,
+      contentCategoryId: CONTENT_CATEGORY_BY_SERVICE[serviceName],
       sizeBytes: REQUEST_SIZES_BYTES[messageKind],
       sourceNodeId: agent.nodeId,
       destinationNodeId: this.random.pick(servers).id,
@@ -116,6 +120,7 @@ export class SimulationEngine {
     const traversedLinks = dropped ? route.links.slice(0, droppedAtLinkIndex + 1) : route.links;
     this.metricsCollector.recordTransmission({
       trafficClassId: message.trafficClassId,
+      contentCategoryId: message.contentCategoryId,
       sizeBytes: message.sizeBytes,
       traversedLinks,
       dropped

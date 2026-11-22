@@ -8,13 +8,17 @@ const REPLY_PROBABILITY = 0.7;
 
 // Generative agent: publishes synthetic content and mostly replies to whatever is recent, human or not
 export class GenAiAgent extends Agent {
+  static getExpectedRequestsPerSecond() {
+    return 1 / MEAN_SECONDS_BETWEEN_ACTIONS;
+  }
+
   getNextActivationDelaySeconds(random) {
     return random.exponential(MEAN_SECONDS_BETWEEN_ACTIONS);
   }
 
   act(agentContext) {
     if (agentContext.random.chance(FEED_SCRAPE_PROBABILITY)) {
-      agentContext.sendToService(this, 'social', MESSAGE_KINDS.PAGE_REQUEST);
+      agentContext.sendToService(this, 'social', MESSAGE_KINDS.CONTENT_REQUEST);
     } else {
       publishPostOrReply(this, agentContext, REPLY_PROBABILITY);
     }

@@ -6,12 +6,17 @@ const MEAN_SECONDS_BETWEEN_ACTIONS = 3;
 const MEAN_SESSION_SECONDS = 25;
 const MEAN_IDLE_SECONDS = 35;
 const INITIAL_SESSION_PROBABILITY = 0.4;
-const POST_PROBABILITY = 0.15;
+export const POST_PROBABILITY = 0.15;
 const REPLY_PROBABILITY = 0.5;
 const MINIMUM_WAKE_UP_DELAY_SECONDS = 0.1;
 
 // Humans alternate between browsing sessions and idle periods, which makes their traffic bursty
 export class HumanAgent extends Agent {
+  static getExpectedRequestsPerSecond() {
+    const sessionFraction = MEAN_SESSION_SECONDS / (MEAN_SESSION_SECONDS + MEAN_IDLE_SECONDS);
+    return sessionFraction / MEAN_SECONDS_BETWEEN_ACTIONS;
+  }
+
   initialize(random) {
     this.isInSession = random.chance(INITIAL_SESSION_PROBABILITY);
     this.sessionStateEndsAt = random.exponential(this.isInSession ? MEAN_SESSION_SECONDS : MEAN_IDLE_SECONDS);
@@ -31,8 +36,10 @@ export class HumanAgent extends Agent {
     }
     if (agentContext.random.chance(POST_PROBABILITY)) {
       publishPostOrReply(this, agentContext, REPLY_PROBABILITY);
+    } else if (agentContext.random.chance(agentContext.trafficProfile.videoRequestShareByGroup.human)) {
+      agentContext.sendToService(this, 'video', MESSAGE_KINDS.CONTENT_REQUEST);
     } else {
-      agentContext.sendToService(this, agentContext.random.pick(['web', 'social']), MESSAGE_KINDS.PAGE_REQUEST);
+      agentContext.sendToService(this, agentContext.random.pick(['web', 'social']), MESSAGE_KINDS.CONTENT_REQUEST);
     }
   }
 

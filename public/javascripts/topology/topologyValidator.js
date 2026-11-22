@@ -1,6 +1,7 @@
 import { isValidIpv4, isValidCidr, subnetsOverlap, isAddressInSubnet, getAgentCapacity } from './ipAddressing.js';
 import { SERVER_SERVICES } from './networkCatalog.js';
 import { TRAFFIC_CLASSES } from '../shared/trafficClasses.js';
+import { DEFAULT_TRAFFIC_PROFILE } from '../shared/trafficProfile.js';
 
 const SERVICE_REQUIRED_BY_CLASS = {
   'human-mobile': ['web', 'social'],
@@ -159,11 +160,20 @@ function validatePopulation(definition, populationByClass, report) {
   }
 }
 
-export function validateTopology(definition, populationByClass = {}) {
+function validateVideoService(definition, trafficProfile, report) {
+  const videoShares = Object.values(trafficProfile.videoRequestShareByGroup);
+  const hasVideoServer = definition.nodes.some((node) => node.type === 'server' && node.service === 'video');
+  if (!hasVideoServer && videoShares.some((share) => share > 0)) {
+    report.addWarning(`No hay ${SERVER_SERVICES.video.label}: no se generará tráfico de vídeo.`);
+  }
+}
+
+export function validateTopology(definition, populationByClass = {}, trafficProfile = DEFAULT_TRAFFIC_PROFILE) {
   const report = new ValidationReport();
   validateAddresses(definition, report);
   validateLinks(definition, report);
   validateConnectivity(definition, report);
   validatePopulation(definition, populationByClass, report);
+  validateVideoService(definition, trafficProfile, report);
   return report;
 }
